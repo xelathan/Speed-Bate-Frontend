@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:speed_bate_frontend/home/middleware.dart';
 import 'package:speed_bate_frontend/primitives/themes.dart';
 import 'package:speed_bate_frontend/reducer.dart';
@@ -21,7 +22,8 @@ final store = Store<AppState>(
   ],
 );
 
-void main() {
+void main() async {
+  await dotenv.load(fileName: ".env");
   runApp(const App());
 }
 

@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 
 import 'package:speed_bate_frontend/primitives/http.dart';
@@ -37,11 +38,17 @@ Future<TopicMetadataResponse> getTopicMetaData(String topicName) async {
           .replace(queryParameters: queryParams);
 
   try {
-    final response = await http.post(uri, body: jsonEncode(queryParams));
+    print(dotenv.env['API_KEY']);
+    final response = await http.post(
+      uri,
+      body: jsonEncode(queryParams),
+      headers: {
+        'x-api-key': dotenv.env['API_KEY']!,
+      },
+    );
 
     if (response.statusCode == 200) {
       final jsonRes = jsonDecode(response.body);
-      print(jsonRes);
       return TopicMetadataResponse.fromJson(jsonRes);
     } else {
       throw Exception('Failed to fetch topic metadata for $topicName');

@@ -1,4 +1,3 @@
-import 'dart:async';
 import 'dart:ui';
 
 import 'package:speed_bate_frontend/websockets/matchmaking_websocket.dart';

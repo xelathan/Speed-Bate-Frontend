@@ -40,13 +40,15 @@ class _StartButtonState extends State<StartButton>
     super.dispose();
   }
 
-  void _animateButton() {
+  void _animateButton({
+    required VoidCallback onComplete,
+  }) {
     setState(() {
       _isMovedDown = !_isMovedDown;
       if (_isMovedDown) {
-        _animationController
-            .forward()
-            .whenCompleteOrCancel(() {}); // Animate downwards with bounce
+        _animationController.forward().whenCompleteOrCancel(
+              () => onComplete(),
+            ); // Animate downwards with bounce
       } else {
         _animationController.reverse(); // Animate upwards smoothly
       }
@@ -56,7 +58,7 @@ class _StartButtonState extends State<StartButton>
   @override
   Widget build(BuildContext context) {
     _bounceAnimation =
-        Tween<double>(begin: 0.0, end: MediaQuery.of(context).size.height / 4)
+        Tween<double>(begin: 0.0, end: MediaQuery.of(context).size.height / 10)
             .animate(
       CurvedAnimation(
         parent: _animationController,
@@ -69,17 +71,17 @@ class _StartButtonState extends State<StartButton>
     return Transform.translate(
       offset: Offset(0, _bounceAnimation.value),
       child: MaterialButton(
+        color: Theme.of(context).buttonTheme.colorScheme?.primary,
         onPressed: !widget.isMatching
             ? () {
                 widget.startMatchmaking();
-                _animateButton();
+                _animateButton(onComplete: () {});
               }
             : () {
                 widget.cancelMatchmaking();
-                _animateButton();
+                _animateButton(onComplete: () {});
               },
         padding: const EdgeInsets.all(24),
-        color: Colors.orange,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(10),
         ),

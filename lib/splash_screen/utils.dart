@@ -33,9 +33,9 @@ Future<TopicMetadataResponse> getTopicMetaData(String topicName) async {
     'topic_name': topicName,
   };
 
-  var uri =
-      Uri.parse('$API_BASE_URL/$API_VERSION/initialize/get_topic_metadata')
-          .replace(queryParameters: queryParams);
+  var uri = Uri.parse(
+          '$HTTP_BASE_URL$HOST:$STREAM_API_PORT/stream_api/$API_VERSION/initialize/get_topic_metadata')
+      .replace(queryParameters: queryParams);
 
   try {
     print(dotenv.env['API_KEY']);

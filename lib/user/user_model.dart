@@ -1,10 +1,14 @@
 import 'package:flutter/widgets.dart';
 
+enum UserMatchingStatus {
+  free,
+  matching,
+  matched,
+}
+
 class UserModel extends ChangeNotifier {
   final String userId;
-  String opponentId = "";
-  String matchId = "";
-  bool isMatching = false;
+  UserMatchingStatus matchingStatus = UserMatchingStatus.free;
 
   UserModel(this.userId);
 
@@ -14,8 +18,8 @@ class UserModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  set setIsMatching(bool _isMatching) {
-    isMatching = _isMatching;
+  set setMatchingStatus(UserMatchingStatus _matchingStatus) {
+    matchingStatus = _matchingStatus;
     notifyListeners();
   }
 }

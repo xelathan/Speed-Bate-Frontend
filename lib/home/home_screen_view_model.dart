@@ -14,14 +14,14 @@ class HomeScreenViewModel extends _$HomeScreenViewModel {
   const HomeScreenViewModel({
     required this.userId,
     required this.startMatchmaking,
-    required this.isMatching,
+    required this.matchingStatus,
     required this.cancelMatchmaking,
   });
 
   factory HomeScreenViewModel.fromState({
     required UserModel user,
     required void Function(dynamic) dispatcher,
-    required VoidCallback toChatScreen,
+    required void Function(String, String) toChatScreen,
     required MatchmakingWebsocket matchmakingWebsocket,
   }) =>
       HomeScreenViewModel(
@@ -29,19 +29,18 @@ class HomeScreenViewModel extends _$HomeScreenViewModel {
         startMatchmaking: () => dispatcher(
           StartMatchmakingAction(
             userId: user.userId,
-            onMatchFound: (opponentId, matchId) {
-              user.matchFound(opponentId, matchId);
-              toChatScreen();
-            },
-            setIsMatching: (val) => user.setIsMatching = val,
+            onMatchFound: (opponentId, matchId) =>
+                toChatScreen(opponentId, matchId),
+            setMatchingStatus: (val) => user.setMatchingStatus = val,
             matchmakingWebsocket: matchmakingWebsocket,
           ),
         ),
-        isMatching: user.isMatching,
+        matchingStatus: user.matchingStatus,
         cancelMatchmaking: () => dispatcher(
           CancelMatchmakingAction(
             userId: user.userId,
-            setIsMatching: () => user.setIsMatching = false,
+            setIsMatching: () =>
+                user.setMatchingStatus = UserMatchingStatus.free,
             matchmakingWebsocket: matchmakingWebsocket,
           ),
         ),
@@ -50,5 +49,5 @@ class HomeScreenViewModel extends _$HomeScreenViewModel {
   final String userId;
   final VoidCallback startMatchmaking;
   final VoidCallback cancelMatchmaking;
-  final bool isMatching;
+  final UserMatchingStatus matchingStatus;
 }

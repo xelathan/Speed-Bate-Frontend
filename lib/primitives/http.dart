@@ -11,7 +11,11 @@ const String HTTP_METHOD_PUT = 'PUT';
 const String HTTP_METHOD_DELETE = 'DELETE';
 const String HTTP_METHOD_PATCH = 'PATCH';
 
-const API_BASE_URL = 'http://localhost:8080/stream_api';
+const HTTP_BASE_URL = 'http://';
+const WEBSOCKET_BASE_URL = 'ws://';
+
+const HOST = 'localhost';
+const STREAM_API_PORT = "8080";
 const API_VERSION = 'v1';
 
 class CustomHttpClient {

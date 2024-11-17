@@ -6,28 +6,35 @@ import 'package:speed_bate_frontend/chat/ui/chat.dart';
 import 'package:speed_bate_frontend/home/home_screen_view_model.dart';
 import 'package:speed_bate_frontend/state.dart';
 import 'package:speed_bate_frontend/user/user_model.dart';
+import 'package:speed_bate_frontend/websockets/matchmaking_websocket.dart';
 import 'package:speed_bate_frontend/widget_library/start_button.dart';
 
 class Home extends StatelessWidget {
   const Home({super.key});
 
   @override
-  Widget build(BuildContext context) => Selector0<HomeScreenViewModel>(
-        selector: (context) => HomeScreenViewModel.fromState(
-            user: context.watch(),
-            dispatcher: StoreProvider.of<AppState>(context).dispatch,
-            matchmakingWebsocket: context.watch(),
-            toChatScreen: (opponentId, matchId) =>
-                Navigator.of(context).pushReplacement(
-                  MaterialPageRoute(
-                    builder: (context) => Chat(
-                      opponentId: opponentId,
-                      matchId: matchId,
+  Widget build(BuildContext context) => ChangeNotifierProvider.value(
+        value: MatchmakingWebsocket(
+          userId: context.read<UserModel>().userId,
+        ),
+        child: Selector0<HomeScreenViewModel>(
+          selector: (context) => HomeScreenViewModel.fromState(
+              user: context.watch(),
+              dispatcher: StoreProvider.of<AppState>(context).dispatch,
+              matchmakingWebsocket: context.watch(),
+              toChatScreen: (opponentId, matchId, topic) =>
+                  Navigator.of(context).pushReplacement(
+                    MaterialPageRoute(
+                      builder: (context) => Chat(
+                        opponentId: opponentId,
+                        matchId: matchId,
+                        topic: topic,
+                      ),
                     ),
-                  ),
-                )),
-        builder: (context, viewModel, _) => HomeScreen(
-          viewModel: viewModel,
+                  )),
+          builder: (context, viewModel, _) => HomeScreen(
+            viewModel: viewModel,
+          ),
         ),
       );
 }

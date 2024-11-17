@@ -71,7 +71,6 @@ class _AnimatedCountdownTimerState extends State<AnimatedCountdownTimer>
                 // When the animation reaches the end, call onFinished
                 if (_animationController.isCompleted &&
                     widget.onFinished != null) {
-                  print("done!!!");
                   widget.onFinished!();
                 }
                 return Transform.scale(

@@ -8,8 +8,10 @@ import 'package:speed_bate_frontend/user/user_model.dart';
 import 'package:web_socket_channel/io.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 
-class MatchmakingWebsocket extends ChangeNotifier {
-  MatchmakingWebsocket();
+class MatchmakingWebsocket extends ChangeNotifier with WidgetsBindingObserver {
+  MatchmakingWebsocket({required this.userId});
+
+  final String userId;
 
   late WebSocketChannel _channel;
   StreamSubscription? _subscription;
@@ -43,7 +45,7 @@ class MatchmakingWebsocket extends ChangeNotifier {
   }
 
   void listenForRequests({
-    required void Function(String, String) onMatchFound,
+    required void Function(String, String, String) onMatchFound,
     required void Function(UserMatchingStatus) setMatchingStatus,
     required String userId,
   }) {
@@ -54,6 +56,7 @@ class MatchmakingWebsocket extends ChangeNotifier {
         onMatchFound(
           jsonMessage['opponent_id'],
           jsonMessage['match_id'],
+          jsonMessage['topic'],
         );
         setMatchingStatus(UserMatchingStatus.matched);
         sendRequest(userId, true);
@@ -77,6 +80,17 @@ class MatchmakingWebsocket extends ChangeNotifier {
   @override
   void dispose() {
     closeChannel();
+    WidgetsBinding.instance.removeObserver(this);
     super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.detached ||
+        state == AppLifecycleState.paused) {
+      print("app is paused");
+      sendRequest(userId, true);
+      closeChannel();
+    }
   }
 }

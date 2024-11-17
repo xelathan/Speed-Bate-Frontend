@@ -21,7 +21,7 @@ class HomeScreenViewModel extends _$HomeScreenViewModel {
   factory HomeScreenViewModel.fromState({
     required UserModel user,
     required void Function(dynamic) dispatcher,
-    required void Function(String, String) toChatScreen,
+    required void Function(String, String, String) toChatScreen,
     required MatchmakingWebsocket matchmakingWebsocket,
   }) =>
       HomeScreenViewModel(
@@ -29,8 +29,8 @@ class HomeScreenViewModel extends _$HomeScreenViewModel {
         startMatchmaking: () => dispatcher(
           StartMatchmakingAction(
             userId: user.userId,
-            onMatchFound: (opponentId, matchId) =>
-                toChatScreen(opponentId, matchId),
+            onMatchFound: (opponentId, matchId, topic) =>
+                toChatScreen(opponentId, matchId, topic),
             setMatchingStatus: (val) => user.setMatchingStatus = val,
             matchmakingWebsocket: matchmakingWebsocket,
           ),

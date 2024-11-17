@@ -14,7 +14,7 @@ class StartMatchmakingAction extends HomeActions {
   });
 
   final String userId;
-  final void Function(String, String) onMatchFound;
+  final void Function(String, String, String) onMatchFound;
   final void Function(UserMatchingStatus) setMatchingStatus;
   final MatchmakingWebsocket matchmakingWebsocket;
 }

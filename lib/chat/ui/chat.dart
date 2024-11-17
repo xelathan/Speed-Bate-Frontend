@@ -16,11 +16,13 @@ class Chat extends StatelessWidget {
   const Chat({
     required this.opponentId,
     required this.matchId,
+    required this.topic,
     super.key,
   });
 
   final String opponentId;
   final String matchId;
+  final String topic;
 
   @override
   Widget build(BuildContext context) => ChangeNotifierProvider.value(
@@ -38,7 +40,7 @@ class Chat extends StatelessWidget {
             user: context.watch(),
             opponentId: opponentId,
             matchId: matchId,
-            debateTopic: "Trump or Biden",
+            debateTopic: topic,
             dispatcher: StoreProvider.of<AppState>(context).dispatch,
             realTimeMessagingWebsocket: context.watch(),
             onLeaveMatch: () => Navigator.of(context).pushReplacement(
@@ -64,8 +66,8 @@ class Chat extends StatelessWidget {
             ),
             showHelpModal: () => showModalBottomSheet(
               context: context,
-              builder: (context) => const MatchHelpBottomModal(
-                debateTopic: "Trump or biden",
+              builder: (context) => MatchHelpBottomModal(
+                debateTopic: topic,
               ),
             ),
           ),
@@ -105,8 +107,7 @@ class _ChatScreenState extends State<ChatScreen> {
       children: [
         Scaffold(
           appBar: chatToolbar(
-            timerPaused:
-                widget.viewModel.chatMatchStatus == ChatMatchStatus.ended,
+            chatMatchStatus: widget.viewModel.chatMatchStatus,
             showHelpModal: widget.viewModel.showHelp,
             onMatchEnd: widget.viewModel.onMatchEnd,
             onLeaveMatch: () => showDialog(
@@ -150,6 +151,7 @@ class _ChatScreenState extends State<ChatScreen> {
         ),
         if (widget.viewModel.chatMatchStatus == ChatMatchStatus.starting)
           ChatStartingOverlay(
+            debateTopic: widget.viewModel.debateTopic,
             setChatMatchStatus: widget.viewModel.setChatMatchStatus,
           )
       ],

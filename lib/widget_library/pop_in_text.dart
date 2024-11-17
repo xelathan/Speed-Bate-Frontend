@@ -5,14 +5,16 @@ class PopInOutText extends StatefulWidget {
     required this.text,
     this.delay = Duration.zero,
     this.onAnimationFinished,
-    this.style = const TextStyle(fontSize: 24), // Default style if not provided
+    this.style = const TextStyle(fontSize: 24),
+    this.textAlign = TextAlign.left,
     super.key,
   });
 
   final String text;
   final Duration delay;
   final VoidCallback? onAnimationFinished;
-  final TextStyle style; // Added style parameter
+  final TextStyle style;
+  final TextAlign textAlign;
 
   @override
   _PopInOutTextState createState() => _PopInOutTextState();
@@ -74,7 +76,8 @@ class _PopInOutTextState extends State<PopInOutText>
       scale: _scaleAnimation,
       child: Text(
         widget.text,
-        style: widget.style, // Apply the passed style
+        textAlign: widget.textAlign,
+        style: widget.style,
       ),
     );
   }

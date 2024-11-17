@@ -6,16 +6,18 @@ import 'package:speed_bate_frontend/widget_library/pop_in_text.dart';
 class ChatStartingOverlay extends StatefulWidget {
   const ChatStartingOverlay({
     required this.setChatMatchStatus,
+    required this.debateTopic,
     super.key,
   });
 
   final void Function(ChatMatchStatus) setChatMatchStatus;
+  final String debateTopic;
 
   @override
-  _ChatStartingOverlayState createState() => _ChatStartingOverlayState();
+  ChatStartingOverlayState createState() => ChatStartingOverlayState();
 }
 
-class _ChatStartingOverlayState extends State<ChatStartingOverlay> {
+class ChatStartingOverlayState extends State<ChatStartingOverlay> {
   bool showCountdown = false;
 
   @override
@@ -29,7 +31,7 @@ class _ChatStartingOverlayState extends State<ChatStartingOverlay> {
           color: Colors.black54,
           child: Column(
             children: [
-              Text(
+              const Text(
                 "Topic",
                 style: TextStyle(
                   fontSize: 24,
@@ -37,30 +39,35 @@ class _ChatStartingOverlayState extends State<ChatStartingOverlay> {
                 ),
               ),
               const SizedBox(height: 24),
-              PopInOutText(
-                text: "Trump or Biden",
-                delay: Duration(seconds: 1),
-                onAnimationFinished: () {
-                  // Wait for 1 second before showing the countdown timer
-                  Future.delayed(Duration(seconds: 1), () {
-                    if (mounted) {
-                      setState(() {
-                        showCountdown = true; // Show and start countdown
-                      });
-                    }
-                  });
-                },
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                child: PopInOutText(
+                  text: widget.debateTopic,
+                  textAlign: TextAlign.center,
+                  delay: const Duration(seconds: 1),
+                  onAnimationFinished: () {
+                    // Wait for 1 second before showing the countdown timer
+                    Future.delayed(const Duration(seconds: 1), () {
+                      if (mounted) {
+                        setState(() {
+                          showCountdown = true; // Show and start countdown
+                        });
+                      }
+                    });
+                  },
+                ),
               ),
               SizedBox(height: MediaQuery.of(context).size.height * 0.15),
               Visibility(
                 visible: showCountdown,
                 child: AnimatedCountdownTimer(
-                  textStyle: TextStyle(
+                  start: 5,
+                  textStyle: const TextStyle(
                     fontSize: 64,
                     fontWeight: FontWeight.bold,
                   ),
                   onFinished: () {
-                    Future.delayed(Duration(milliseconds: 500), () {
+                    Future.delayed(const Duration(milliseconds: 250), () {
                       widget.setChatMatchStatus(ChatMatchStatus.inProgress);
                     });
                   },

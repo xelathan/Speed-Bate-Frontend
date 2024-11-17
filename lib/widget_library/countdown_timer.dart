@@ -1,17 +1,18 @@
 import 'dart:async';
-
 import 'package:flutter/material.dart';
 
 class CountdownTimer extends StatefulWidget {
   final Duration duration;
   final VoidCallback onTimerEnd;
-  final bool isPaused; // New parameter to control pause state
+  final bool isPaused; // Controls the paused state
+  final bool start; // Controls when the timer starts
 
   const CountdownTimer({
     Key? key,
     required this.duration,
     required this.onTimerEnd,
     required this.isPaused,
+    required this.start,
   }) : super(key: key);
 
   @override
@@ -26,15 +27,27 @@ class CountdownTimerState extends State<CountdownTimer> {
   void initState() {
     super.initState();
     _remainingMilliseconds = widget.duration.inMilliseconds;
-    _startTimer();
+    if (widget.start) {
+      _startTimer();
+    }
   }
 
   @override
   void didUpdateWidget(CountdownTimer oldWidget) {
     super.didUpdateWidget(oldWidget);
-    // Reset timer if duration changes
-    if (oldWidget.duration != widget.duration) {
-      _remainingMilliseconds = widget.duration.inMilliseconds;
+
+    // Check if the timer should start or stop based on the new widget properties
+    if (!oldWidget.start && widget.start && _timer == null) {
+      _startTimer();
+    } else if (oldWidget.isPaused != widget.isPaused &&
+        !widget.isPaused &&
+        widget.start) {
+      // Resume timer when unpaused and started
+      _startTimer();
+    } else if (widget.isPaused || !widget.start) {
+      // Pause or stop the timer
+      _timer?.cancel();
+      _timer = null;
     }
   }
 

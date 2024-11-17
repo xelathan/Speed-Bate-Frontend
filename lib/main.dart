@@ -41,9 +41,6 @@ class App extends StatelessWidget {
             const Uuid().v4(),
           ),
         ),
-        ChangeNotifierProvider.value(
-          value: MatchmakingWebsocket(),
-        ),
       ],
       child: StoreProvider<AppState>(
         store: store,

@@ -8,6 +8,7 @@ import 'package:speed_bate_frontend/state.dart';
 import 'package:speed_bate_frontend/user/user_model.dart';
 import 'package:speed_bate_frontend/websockets/matchmaking_websocket.dart';
 import 'package:speed_bate_frontend/widget_library/start_button.dart';
+import 'package:rive/rive.dart';
 
 class Home extends StatelessWidget {
   const Home({super.key});
@@ -54,19 +55,27 @@ class HomeScreen extends StatelessWidget {
         children: [
           Positioned.fill(
             bottom: MediaQuery.of(context).size.height / 6,
+            child: const Align(
+              alignment: Alignment.center,
+              child: RiveAnimation.asset(
+                'assets/rive_animations/home_screen_animation.riv',
+                fit: BoxFit.scaleDown,
+              ),
+            ),
+          ),
+          Positioned.fill(
+            top: MediaQuery.of(context).size.height / 4,
             child: Align(
               alignment: Alignment.center,
               child: viewModel.matchingStatus == UserMatchingStatus.matching
-                  ? SpinKitThreeBounce(
-                      duration: const Duration(milliseconds: 1500),
+                  ? const SpinKitRipple(
                       color: Colors.orange,
-                      size: MediaQuery.of(context).size.height / 10,
                     )
                   : const SizedBox.shrink(),
             ),
           ),
           Positioned.fill(
-            top: MediaQuery.of(context).size.height / 2,
+            top: MediaQuery.of(context).size.height / 1.75,
             child: Align(
               alignment: Alignment.center,
               child: StartButton(

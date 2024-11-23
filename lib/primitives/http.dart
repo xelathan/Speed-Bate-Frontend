@@ -16,6 +16,7 @@ const WEBSOCKET_BASE_URL = 'ws://';
 
 const HOST = 'localhost';
 const STREAM_API_PORT = "8080";
+const ACCOUNTS_API_PORT = "1000";
 const API_VERSION = 'v1';
 
 class CustomHttpClient {

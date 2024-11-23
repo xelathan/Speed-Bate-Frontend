@@ -43,12 +43,15 @@ dependencies:
   http: ^1.2.2
   json_annotation: ^4.9.0
   json_serializable: ^6.8.0
-  web_socket_channel: ^3.0.1
+  web_socket_channel: ^2.4.0
   uuid: ^4.5.1
   flutter_spinkit: ^5.2.1
   flutter_dotenv: ^5.2.1
   collection: ^1.18.0
   fluttertoast: ^8.2.8
+  rive: ^0.13.17
+  graphql_flutter: ^5.1.2
+  path_provider: ^2.1.5
 
 dev_dependencies:
   flutter_test:
@@ -78,6 +81,7 @@ flutter:
   assets:
     - assets/images/
     - assets/certificates/
+    - assets/rive_animations/
     - .env
 
   # An image asset can refer to one or more resolution-specific "variants", see

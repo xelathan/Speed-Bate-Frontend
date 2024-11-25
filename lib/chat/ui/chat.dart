@@ -30,7 +30,7 @@ class Chat extends StatelessWidget {
           chatMatchStatus: ChatMatchStatus.starting,
           channel: RealTimeMessagingWebsocket.initializeChannel(
             matchId: matchId,
-            userId: context.read<UserModel>().userId,
+            userId: (context.read<User>().token!),
           ),
           matchId: matchId,
           opponentId: opponentId,
@@ -66,6 +66,8 @@ class Chat extends StatelessWidget {
             ),
             showHelpModal: () => showModalBottomSheet(
               context: context,
+              useSafeArea: true,
+              isScrollControlled: true,
               builder: (context) => MatchHelpBottomModal(
                 debateTopic: topic,
               ),

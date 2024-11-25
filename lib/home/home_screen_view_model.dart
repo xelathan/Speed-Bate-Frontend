@@ -12,23 +12,20 @@ part 'home_screen_view_model.g.dart';
 @FunctionalData()
 class HomeScreenViewModel extends _$HomeScreenViewModel {
   const HomeScreenViewModel({
-    required this.userId,
     required this.startMatchmaking,
     required this.matchingStatus,
     required this.cancelMatchmaking,
   });
 
   factory HomeScreenViewModel.fromState({
-    required UserModel user,
+    required User user,
     required void Function(dynamic) dispatcher,
     required void Function(String, String, String) toChatScreen,
     required MatchmakingWebsocket matchmakingWebsocket,
   }) =>
       HomeScreenViewModel(
-        userId: user.userId,
         startMatchmaking: () => dispatcher(
           StartMatchmakingAction(
-            userId: user.userId,
             onMatchFound: (opponentId, matchId, topic) =>
                 toChatScreen(opponentId, matchId, topic),
             setMatchingStatus: (val) => user.setMatchingStatus = val,
@@ -38,7 +35,6 @@ class HomeScreenViewModel extends _$HomeScreenViewModel {
         matchingStatus: user.matchingStatus,
         cancelMatchmaking: () => dispatcher(
           CancelMatchmakingAction(
-            userId: user.userId,
             setIsMatching: () =>
                 user.setMatchingStatus = UserMatchingStatus.free,
             matchmakingWebsocket: matchmakingWebsocket,
@@ -46,7 +42,6 @@ class HomeScreenViewModel extends _$HomeScreenViewModel {
         ),
       );
 
-  final String userId;
   final VoidCallback startMatchmaking;
   final VoidCallback cancelMatchmaking;
   final UserMatchingStatus matchingStatus;

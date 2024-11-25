@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_redux/flutter_redux.dart';
 import 'package:provider/provider.dart';
+import 'package:speed_bate_frontend/home/home.dart';
 import 'package:speed_bate_frontend/login/login_screen_view_model.dart';
 import 'package:speed_bate_frontend/primitives/themes.dart';
-import 'package:speed_bate_frontend/signup/signup.dart';
+import 'package:speed_bate_frontend/signup/ui/signup.dart';
+import 'package:speed_bate_frontend/state.dart';
 
 class Login extends StatelessWidget {
   const Login({super.key});
@@ -10,9 +13,40 @@ class Login extends StatelessWidget {
   @override
   Widget build(BuildContext context) => Selector0(
         selector: (context) => LoginScreenViewModel.fromState(
-          onSignUp: () => Navigator.of(context).push(
-            MaterialPageRoute(
-              builder: (context) => const Signup(),
+          client: context.watch(),
+          user: context.watch(),
+          dispatcher: StoreProvider.of<AppState>(context).dispatch,
+          onSignUp: () => showModalBottomSheet(
+            context: context,
+            shape: const RoundedRectangleBorder(
+              borderRadius: BorderRadius.vertical(
+                top: Radius.circular(paddingMedium),
+              ),
+            ),
+            isScrollControlled: true,
+            useSafeArea: true,
+            builder: (context) => const FractionallySizedBox(
+              heightFactor: 1.0,
+              child: Signup(),
+            ),
+          ),
+          toHomeScreen: () => Navigator.of(context).pushReplacement(
+            PageRouteBuilder(
+              pageBuilder: (context, animation, secondaryAnimation) =>
+                  const Home(),
+              transitionsBuilder:
+                  (context, animation, secondaryAnimation, child) {
+                // You can define the type of animation you want here.
+                const begin = Offset(1.0, 0.0); // Slide from the right
+                const end = Offset.zero;
+                const curve = Curves.easeInOut;
+
+                var tween = Tween(begin: begin, end: end)
+                    .chain(CurveTween(curve: curve));
+                var offsetAnimation = animation.drive(tween);
+
+                return SlideTransition(position: offsetAnimation, child: child);
+              },
             ),
           ),
         ),
@@ -35,6 +69,8 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
+  final _formKey = GlobalKey<FormState>();
+
   final phoneNumberController = TextEditingController();
   final passwordController = TextEditingController();
 
@@ -43,114 +79,142 @@ class _LoginScreenState extends State<LoginScreen> {
   String? errorPhoneNumber;
   String? errorPassword;
 
+  void setErrorPhoneNumber(String? error) => setState(() {
+        errorPhoneNumber = error;
+      });
+
+  void setErrorPassword(String? error) => setState(() {
+        errorPassword = error;
+      });
+
   @override
   Widget build(BuildContext context) => Scaffold(
         body: SafeArea(
           child: Padding(
             padding: const EdgeInsets.all(paddingMedium),
-            child: Column(
-              children: [
-                TextField(
-                  keyboardType: TextInputType.phone,
-                  cursorColor: cursorColor,
-                  cursorErrorColor: cursorColor,
-                  controller: phoneNumberController,
-                  decoration: InputDecoration(
-                    errorText: errorPhoneNumber,
-                    errorStyle: const TextStyle(color: Colors.red),
-                    labelText: 'Phone Number',
-                    contentPadding: const EdgeInsets.all(paddingMedium),
-                  ),
-                ),
-                const SizedBox(height: paddingMedium),
-                TextField(
-                  cursorColor: cursorColor,
-                  cursorErrorColor: cursorColor,
-                  controller: passwordController,
-                  decoration: InputDecoration(
-                    errorText: errorPassword,
-                    labelText: 'Password',
-                    errorStyle: const TextStyle(
-                      color: Colors.red,
+            child: Form(
+              key: _formKey,
+              child: Column(
+                children: [
+                  TextFormField(
+                    keyboardType: TextInputType.phone,
+                    cursorColor: cursorColor,
+                    cursorErrorColor: cursorColor,
+                    controller: phoneNumberController,
+                    autofillHints: const [
+                      AutofillHints.telephoneNumberLocalPrefix
+                    ],
+                    decoration: InputDecoration(
+                      prefixIcon: const Icon(Icons.phone_iphone),
+                      errorText: errorPhoneNumber,
+                      errorStyle: const TextStyle(color: Colors.red),
+                      labelText: 'Phone Number',
+                      contentPadding: const EdgeInsets.all(paddingMedium),
                     ),
-                    contentPadding: const EdgeInsets.all(paddingMedium),
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please enter your phone number';
+                      }
+                      if (!phoneRegExp.hasMatch(value)) {
+                        return 'Please enter a valid phone number';
+                      }
+                      return null;
+                    },
                   ),
-                ),
-                TextButton(
-                    onPressed: () {}, child: const Text('Forgot Password?')),
-                const SizedBox(height: paddingMedium),
-                MaterialButton(
-                  onPressed: () {
-                    String? errorPhoneNumberMessage;
-                    if (!phoneRegExp.hasMatch(phoneNumberController.text)) {
-                      errorPhoneNumberMessage = 'Invalid phone number';
-                    } else {
-                      errorPhoneNumberMessage = null;
-                    }
-
-                    String? errorPasswordMessage;
-                    if (passwordController.text.length < 8) {
-                      errorPasswordMessage =
-                          'Password must be at least 8 characters';
-                    } else {
-                      errorPasswordMessage = null;
-                    }
-
-                    setState(() {
-                      errorPhoneNumber = errorPhoneNumberMessage;
-                      errorPassword = errorPasswordMessage;
-                    });
-                  },
-                  minWidth: MediaQuery.of(context).size.width,
-                  padding: const EdgeInsets.all(paddingSmall),
-                  color: Theme.of(context).buttonTheme.colorScheme?.primary,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(borderRadiusVeryRound),
+                  const SizedBox(height: paddingMedium),
+                  TextFormField(
+                    keyboardType: TextInputType.text,
+                    obscureText: true,
+                    cursorColor: cursorColor,
+                    cursorErrorColor: cursorColor,
+                    controller: passwordController,
+                    autofillHints: const [
+                      AutofillHints.newPassword,
+                    ],
+                    decoration: InputDecoration(
+                      prefixIcon: const Icon(Icons.lock),
+                      errorText: errorPassword,
+                      errorStyle: const TextStyle(color: Colors.red),
+                      labelText: 'Password',
+                      contentPadding: const EdgeInsets.all(paddingMedium),
+                    ),
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please enter a password';
+                      }
+                      if (value.length < 8) {
+                        return 'Password must be at least 8 characters';
+                      }
+                      return null;
+                    },
                   ),
-                  child: const Text(
-                    'Login',
-                    style: TextStyle(fontSize: 20),
+                  TextButton(
+                      onPressed: () {}, child: const Text('Forgot Password?')),
+                  const SizedBox(height: paddingMedium),
+                  MaterialButton(
+                    onPressed: () {
+                      if (_formKey.currentState!.validate()) {
+                        widget.viewModel.onLogin(
+                          phoneNumberController.text,
+                          passwordController.text,
+                          setErrorPhoneNumber,
+                          setErrorPassword,
+                        );
+                      }
+                    },
+                    minWidth: MediaQuery.of(context).size.width,
+                    padding: const EdgeInsets.all(paddingSmall),
+                    color: Theme.of(context).buttonTheme.colorScheme?.primary,
+                    shape: RoundedRectangleBorder(
+                      borderRadius:
+                          BorderRadius.circular(borderRadiusVeryRound),
+                    ),
+                    child: const Text(
+                      'Login',
+                      style: TextStyle(fontSize: 20),
+                    ),
                   ),
-                ),
-                const SizedBox(height: paddingMedium),
-                const Row(
-                  children: [
-                    Expanded(
-                      child: Divider(
-                        thickness: 1,
-                        color: Colors.grey,
+                  const SizedBox(height: paddingMedium),
+                  const Row(
+                    children: [
+                      Expanded(
+                        child: Divider(
+                          thickness: 1,
+                          color: Colors.grey,
+                        ),
                       ),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 8.0),
-                      child: Text(
-                        "OR",
-                        style: TextStyle(color: Colors.grey),
+                      Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 8.0),
+                        child: Text(
+                          "OR",
+                          style: TextStyle(color: Colors.grey),
+                        ),
                       ),
-                    ),
-                    Expanded(
-                      child: Divider(
-                        thickness: 1,
-                        color: Colors.grey,
+                      Expanded(
+                        child: Divider(
+                          thickness: 1,
+                          color: Colors.grey,
+                        ),
                       ),
+                    ],
+                  ),
+                  const SizedBox(height: paddingMedium),
+                  MaterialButton(
+                    onPressed: widget.viewModel.onSignUp,
+                    minWidth: MediaQuery.of(context).size.width,
+                    padding: const EdgeInsets.all(paddingSmall),
+                    color: Theme.of(context).buttonTheme.colorScheme?.primary,
+                    shape: RoundedRectangleBorder(
+                      borderRadius:
+                          BorderRadius.circular(borderRadiusVeryRound),
                     ),
-                  ],
-                ),
-                const SizedBox(height: paddingMedium),
-                MaterialButton(
-                  onPressed: widget.viewModel.onSignUp,
-                  minWidth: MediaQuery.of(context).size.width,
-                  padding: const EdgeInsets.all(paddingSmall),
-                  color: Theme.of(context).buttonTheme.colorScheme?.primary,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(borderRadiusVeryRound),
+                    child: const Text(
+                      'Sign Up',
+                      style: TextStyle(fontSize: 20),
+                    ),
                   ),
-                  child: const Text(
-                    'Sign Up',
-                    style: TextStyle(fontSize: 20),
-                  ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ),

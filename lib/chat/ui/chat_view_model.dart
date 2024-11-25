@@ -31,7 +31,7 @@ class ChatViewModel extends _$ChatViewModel {
   });
 
   factory ChatViewModel.fromState({
-    required UserModel user,
+    required User user,
     required String opponentId,
     required String matchId,
     required String debateTopic,
@@ -41,7 +41,7 @@ class ChatViewModel extends _$ChatViewModel {
     required VoidCallback showHelpModal,
   }) =>
       ChatViewModel(
-        userId: user.userId,
+        userId: user.token,
         opponentId: opponentId,
         matchId: matchId,
         debateTopic: debateTopic,
@@ -57,7 +57,7 @@ class ChatViewModel extends _$ChatViewModel {
               realTimeMessagingWebsocket: realTimeMessagingWebsocket,
               setMatchingStatusFree: () =>
                   user.setMatchingStatus = UserMatchingStatus.free,
-              userId: user.userId,
+              userId: (user.token),
             ),
           );
           onLeaveMatch();

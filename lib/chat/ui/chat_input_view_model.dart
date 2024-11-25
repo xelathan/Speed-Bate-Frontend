@@ -21,7 +21,7 @@ class ChatInputViewModel extends _$ChatInputViewModel {
     required void Function(dynamic) dispatcher,
     required String matchId,
     required String opponentId,
-    required UserModel user,
+    required User user,
     required RealTimeMessagingWebsocket realTimeMessagingWebsocket,
   }) =>
       ChatInputViewModel(
@@ -30,7 +30,7 @@ class ChatInputViewModel extends _$ChatInputViewModel {
             text: text,
             matchId: matchId,
             opponentId: opponentId,
-            userId: user.userId,
+            userId: user.token,
             realTimeMessagingWebsocket: realTimeMessagingWebsocket,
           ),
         ),

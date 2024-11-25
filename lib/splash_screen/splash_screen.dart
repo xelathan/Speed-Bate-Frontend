@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:speed_bate_frontend/home/home.dart';
+import 'package:speed_bate_frontend/login/login.dart';
 import 'package:speed_bate_frontend/splash_screen/splash_screen_view_model.dart';
 import 'package:speed_bate_frontend/state.dart';
 
@@ -24,7 +25,7 @@ class InitializeScreen extends StatelessWidget {
             child: child,
           ),
           child: isDataLoaded
-              ? const Home() // If data is loaded, show Home screen
+              ? const Login() // If data is loaded, show Home screen
               : SplashScreenView(
                   // If not, show SplashScreen
                   viewModel: SplashScreenViewModel.fromState(

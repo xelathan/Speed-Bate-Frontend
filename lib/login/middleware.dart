@@ -9,12 +9,43 @@ void loginMiddleware(
   NextDispatcher next,
 ) async {
   if (action is LoginUserAction) {
-    final token = await loginUser(
-      phoneNumber: action.phoneNumber,
-      password: action.password,
-      client: action.client,
-    );
+    try {
+      final token = await loginUser(
+        phoneNumber: action.phoneNumber,
+        password: action.password,
+        client: action.client.client,
+      );
+      action.client.upgradeProtected(token);
 
-    print(token);
+      store.dispatch(
+        GetUserDataAction(
+          token: token,
+          user: action.user,
+          client: action.client,
+          toHomeScreen: action.toHomeScreen,
+        ),
+      );
+      action.setErrorPhoneNumber(null);
+      action.setErrorPassword(null);
+    } on PasswordException catch (e) {
+      action.setErrorPassword(e.message);
+    } on PhoneNumberException catch (e) {
+      action.setErrorPhoneNumber(e.message);
+    } catch (e) {
+      action.setErrorPassword(e.toString());
+    }
+  } else if (action is GetUserDataAction) {
+    try {
+      final userData = await getUserData(
+        client: action.client.client,
+      );
+
+      action.user.fromLogin(userData, action.token);
+      action.toHomeScreen();
+    } catch (e) {
+      print("Error: $e");
+    }
   }
+
+  next(action);
 }

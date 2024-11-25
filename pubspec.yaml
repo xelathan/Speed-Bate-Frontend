@@ -52,6 +52,7 @@ dependencies:
   rive: ^0.13.17
   graphql_flutter: ^5.1.2
   path_provider: ^2.1.5
+  encrypt: ^5.0.3
 
 dev_dependencies:
   flutter_test:

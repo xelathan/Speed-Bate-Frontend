@@ -16,7 +16,7 @@ class Home extends StatelessWidget {
   @override
   Widget build(BuildContext context) => ChangeNotifierProvider.value(
         value: MatchmakingWebsocket(
-          userId: context.read<UserModel>().userId,
+          token: context.read<User>().token,
         ),
         child: Selector0<HomeScreenViewModel>(
           selector: (context) => HomeScreenViewModel.fromState(
@@ -26,11 +26,7 @@ class Home extends StatelessWidget {
               toChatScreen: (opponentId, matchId, topic) =>
                   Navigator.of(context).pushReplacement(
                     MaterialPageRoute(
-                      builder: (context) => Chat(
-                        opponentId: opponentId,
-                        matchId: matchId,
-                        topic: topic,
-                      ),
+                      builder: (context) => Placeholder(),
                     ),
                   )),
           builder: (context, viewModel, _) => HomeScreen(

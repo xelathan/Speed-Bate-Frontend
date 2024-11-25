@@ -19,11 +19,11 @@ class ScrollableMessageListViewModel extends _$ScrollableMessageListViewModel {
 
   factory ScrollableMessageListViewModel.fromState({
     required RealTimeMessagingWebsocket realTimeMessagingWebsocket,
-    required UserModel user,
+    required User user,
   }) =>
       ScrollableMessageListViewModel(
         messages: realTimeMessagingWebsocket.messages,
-        userId: user.userId,
+        userId: user.token,
       );
 
   @CustomEquality(DeepCollectionEquality())

@@ -9,18 +9,17 @@ void homeScreenMiddleware(
   NextDispatcher next,
 ) async {
   if (action is StartMatchmakingAction) {
-    action.matchmakingWebsocket.initializeChannel(action.userId);
+    action.matchmakingWebsocket.initializeChannel();
 
-    action.matchmakingWebsocket.sendRequest(action.userId, false);
+    action.matchmakingWebsocket.sendRequest(true);
     action.setMatchingStatus(UserMatchingStatus.matching);
 
     action.matchmakingWebsocket.listenForRequests(
       onMatchFound: action.onMatchFound,
       setMatchingStatus: action.setMatchingStatus,
-      userId: action.userId,
     );
   } else if (action is CancelMatchmakingAction) {
-    action.matchmakingWebsocket.sendRequest(action.userId, true);
+    action.matchmakingWebsocket.sendRequest(false);
     action.matchmakingWebsocket.closeChannel();
     action.setIsMatching();
   }

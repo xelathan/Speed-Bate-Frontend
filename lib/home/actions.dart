@@ -7,13 +7,11 @@ sealed class HomeActions {}
 
 class StartMatchmakingAction extends HomeActions {
   StartMatchmakingAction({
-    required this.userId,
     required this.onMatchFound,
     required this.setMatchingStatus,
     required this.matchmakingWebsocket,
   });
 
-  final String userId;
   final void Function(String, String, String) onMatchFound;
   final void Function(UserMatchingStatus) setMatchingStatus;
   final MatchmakingWebsocket matchmakingWebsocket;
@@ -21,12 +19,10 @@ class StartMatchmakingAction extends HomeActions {
 
 class CancelMatchmakingAction extends HomeActions {
   CancelMatchmakingAction({
-    required this.userId,
     required this.setIsMatching,
     required this.matchmakingWebsocket,
   });
 
-  final String userId;
   final VoidCallback setIsMatching;
   final MatchmakingWebsocket matchmakingWebsocket;
 }

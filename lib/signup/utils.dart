@@ -1,10 +1,9 @@
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
-import 'package:speed_bate_frontend/encryption/encryption.dart';
 
-const loginUserQuery = """
-    query LoginUser(\$phoneNumber: String!, \$password: String!) {
-      loginUser(input: {
+const createUserQuery = """
+    mutation CreateUser(\$username: String!, \$phoneNumber: String!, \$password: String!) {
+      createUser(input: {
+        username: \$username,
         phoneNumber: \$phoneNumber,
         password: \$password
       }) {
@@ -13,25 +12,24 @@ const loginUserQuery = """
     }
   """;
 
-const getUserDataQuery = """
+const getUserIdQuery = """
     query GetUser {
       getUser {
-        id,
-        username,
-        phoneNumber,
-        verified
+        id
       }
     }
   """;
 
-Future<String> loginUser({
+Future<String> signUpUser({
+  required String username,
   required String phoneNumber,
   required String password,
   required GraphQLClient client,
 }) async {
   final options = MutationOptions(
-    document: gql(loginUserQuery),
+    document: gql(createUserQuery),
     variables: <String, dynamic>{
+      'username': username,
       'phoneNumber': phoneNumber,
       'password': password,
     },
@@ -45,20 +43,22 @@ Future<String> loginUser({
       throw result.exception!;
     }
 
-    // If no exception, return token
-    final token = result.data?['loginUser']['token'];
+    final token = result.data?['createUser']['token'];
+
     if (token == null) {
-      throw Exception('Login failed, no token received');
+      throw Exception('Token is null');
     }
 
-    return token; // Return the token
+    return token;
   } on OperationException catch (e) {
     final message = e.graphqlErrors.first.message;
 
+    print(message);
+
     switch (message) {
-      case "wrong password":
-        throw PasswordException(message);
-      case "phone number not found":
+      case "a user with the same username already exists":
+        throw UsernameException(message);
+      case "a user with the same phone number already exists":
         throw PhoneNumberException(message);
       default:
         rethrow;
@@ -68,11 +68,11 @@ Future<String> loginUser({
   }
 }
 
-Future<Map<String, dynamic>> getUserData({
+Future<String> getUserId({
   required GraphQLClient client,
 }) async {
   final options = QueryOptions(
-    document: gql(getUserDataQuery),
+    document: gql(getUserIdQuery),
   );
 
   try {
@@ -83,27 +83,21 @@ Future<Map<String, dynamic>> getUserData({
       throw result.exception!;
     }
 
-    final encryptionKey = dotenv.env['SYMMETRIC_ENCRYPTION_KEY'];
+    final userId = result.data?['getUser']['id'];
 
-    result.data?['getUser']['phoneNumber'] = symmetricDecryptAES(
-      result.data?['getUser']['phoneNumber'],
-      encryptionKey!,
-    );
-
-    return result.data?['getUser'];
+    return userId;
   } catch (e) {
     print("Error: $e");
     rethrow;
   }
 }
 
-class PasswordException implements Exception {
-  PasswordException(this.message);
+class UsernameException implements Exception {
+  UsernameException(this.message);
 
   final String message;
-
   @override
-  String toString() => 'PasswordException: $message';
+  String toString() => 'UsernameException: $message';
 }
 
 class PhoneNumberException implements Exception {

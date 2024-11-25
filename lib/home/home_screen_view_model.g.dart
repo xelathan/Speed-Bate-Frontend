@@ -9,19 +9,16 @@ part of 'home_screen_view_model.dart';
 abstract class _$HomeScreenViewModel {
   const _$HomeScreenViewModel();
 
-  String get userId;
   VoidCallback get startMatchmaking;
   VoidCallback get cancelMatchmaking;
   UserMatchingStatus get matchingStatus;
 
   HomeScreenViewModel copyWith({
-    String? userId,
     VoidCallback? startMatchmaking,
     VoidCallback? cancelMatchmaking,
     UserMatchingStatus? matchingStatus,
   }) =>
       HomeScreenViewModel(
-        userId: userId ?? this.userId,
         startMatchmaking: startMatchmaking ?? this.startMatchmaking,
         cancelMatchmaking: cancelMatchmaking ?? this.cancelMatchmaking,
         matchingStatus: matchingStatus ?? this.matchingStatus,
@@ -30,14 +27,12 @@ abstract class _$HomeScreenViewModel {
   HomeScreenViewModel copyUsing(
       void Function(_HomeScreenViewModel$Change change) mutator) {
     final change = _HomeScreenViewModel$Change._(
-      this.userId,
       this.startMatchmaking,
       this.cancelMatchmaking,
       this.matchingStatus,
     );
     mutator(change);
     return HomeScreenViewModel(
-      userId: change.userId,
       startMatchmaking: change.startMatchmaking,
       cancelMatchmaking: change.cancelMatchmaking,
       matchingStatus: change.matchingStatus,
@@ -46,14 +41,13 @@ abstract class _$HomeScreenViewModel {
 
   @override
   String toString() =>
-      "HomeScreenViewModel(userId: $userId, startMatchmaking: $startMatchmaking, cancelMatchmaking: $cancelMatchmaking, matchingStatus: $matchingStatus)";
+      "HomeScreenViewModel(startMatchmaking: $startMatchmaking, cancelMatchmaking: $cancelMatchmaking, matchingStatus: $matchingStatus)";
 
   @override
   // ignore: avoid_equals_and_hash_code_on_mutable_classes
   bool operator ==(Object other) =>
       other is HomeScreenViewModel &&
       other.runtimeType == runtimeType &&
-      userId == other.userId &&
       startMatchmaking == other.startMatchmaking &&
       cancelMatchmaking == other.cancelMatchmaking &&
       matchingStatus == other.matchingStatus;
@@ -62,7 +56,6 @@ abstract class _$HomeScreenViewModel {
   // ignore: avoid_equals_and_hash_code_on_mutable_classes
   int get hashCode {
     var result = 17;
-    result = 37 * result + userId.hashCode;
     result = 37 * result + startMatchmaking.hashCode;
     result = 37 * result + cancelMatchmaking.hashCode;
     result = 37 * result + matchingStatus.hashCode;
@@ -72,13 +65,11 @@ abstract class _$HomeScreenViewModel {
 
 class _HomeScreenViewModel$Change {
   _HomeScreenViewModel$Change._(
-    this.userId,
     this.startMatchmaking,
     this.cancelMatchmaking,
     this.matchingStatus,
   );
 
-  String userId;
   VoidCallback startMatchmaking;
   VoidCallback cancelMatchmaking;
   UserMatchingStatus matchingStatus;
@@ -86,11 +77,6 @@ class _HomeScreenViewModel$Change {
 
 // ignore: avoid_classes_with_only_static_members
 class HomeScreenViewModel$ {
-  static final userId = Lens<HomeScreenViewModel, String>(
-    (userIdContainer) => userIdContainer.userId,
-    (userIdContainer, userId) => userIdContainer.copyWith(userId: userId),
-  );
-
   static final startMatchmaking = Lens<HomeScreenViewModel, VoidCallback>(
     (startMatchmakingContainer) => startMatchmakingContainer.startMatchmaking,
     (startMatchmakingContainer, startMatchmaking) =>

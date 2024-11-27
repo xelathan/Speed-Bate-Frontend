@@ -3,7 +3,7 @@ import 'package:flutter_redux/flutter_redux.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:provider/provider.dart';
 import 'package:speed_bate_frontend/chat/ui/chat.dart';
-import 'package:speed_bate_frontend/home/home_screen_view_model.dart';
+import 'package:speed_bate_frontend/home/ui/home_screen_view_model.dart';
 import 'package:speed_bate_frontend/state.dart';
 import 'package:speed_bate_frontend/user/user_model.dart';
 import 'package:speed_bate_frontend/websockets/matchmaking_websocket.dart';
@@ -26,6 +26,7 @@ class Home extends StatelessWidget {
               toChatScreen: (opponentId, matchId, topic) =>
                   Navigator.of(context).pushReplacement(
                     MaterialPageRoute(
+                      // Chat screen
                       builder: (context) => Placeholder(),
                     ),
                   )),

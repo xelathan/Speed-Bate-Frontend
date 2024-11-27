@@ -7,7 +7,7 @@ import 'package:speed_bate_frontend/chat/ui/chat_toolbar.dart';
 import 'package:speed_bate_frontend/chat/ui/chat_view_model.dart';
 import 'package:speed_bate_frontend/chat/ui/match_help_bottom_modal.dart.dart';
 import 'package:speed_bate_frontend/chat/ui/scrollable_message_list.dart';
-import 'package:speed_bate_frontend/home/home.dart';
+import 'package:speed_bate_frontend/home/ui/home.dart';
 import 'package:speed_bate_frontend/state.dart';
 import 'package:speed_bate_frontend/user/user_model.dart';
 import 'package:speed_bate_frontend/websockets/real_time_messaging_websocket.dart';
@@ -30,7 +30,7 @@ class Chat extends StatelessWidget {
           chatMatchStatus: ChatMatchStatus.starting,
           channel: RealTimeMessagingWebsocket.initializeChannel(
             matchId: matchId,
-            userId: (context.read<User>().token!),
+            userId: context.read<User>().token,
           ),
           matchId: matchId,
           opponentId: opponentId,

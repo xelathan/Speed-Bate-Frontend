@@ -13,6 +13,7 @@ class LoginUserAction extends LoginAction {
   final void Function(String?) setErrorPhoneNumber;
   final void Function(String?) setErrorPassword;
   final VoidCallback toHomeScreen;
+  final VoidCallback toVerifyPhoneNumberScreen;
 
   LoginUserAction({
     required this.phoneNumber,
@@ -21,6 +22,7 @@ class LoginUserAction extends LoginAction {
     required this.setErrorPassword,
     required this.setErrorPhoneNumber,
     required this.toHomeScreen,
+    required this.toVerifyPhoneNumberScreen,
     required this.user,
   });
 }
@@ -30,6 +32,7 @@ class GetUserDataAction extends LoginAction {
   final String token;
   final User user;
   final VoidCallback toHomeScreen;
+  final VoidCallback toVerifyPhoneNumberScreen;
   final GraphQlClientProvider client;
 
   GetUserDataAction({
@@ -37,5 +40,6 @@ class GetUserDataAction extends LoginAction {
     required this.user,
     required this.client,
     required this.toHomeScreen,
+    required this.toVerifyPhoneNumberScreen,
   });
 }

@@ -23,6 +23,7 @@ void loginMiddleware(
           user: action.user,
           client: action.client,
           toHomeScreen: action.toHomeScreen,
+          toVerifyPhoneNumberScreen: action.toVerifyPhoneNumberScreen,
         ),
       );
       action.setErrorPhoneNumber(null);
@@ -41,7 +42,11 @@ void loginMiddleware(
       );
 
       action.user.fromLogin(userData, action.token);
-      action.toHomeScreen();
+      if (action.user.verified) {
+        action.toHomeScreen();
+      } else {
+        action.toVerifyPhoneNumberScreen();
+      }
     } catch (e) {
       print("Error: $e");
     }

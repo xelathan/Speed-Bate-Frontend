@@ -1,5 +1,7 @@
 import 'dart:ui';
 
+import 'package:flutter/material.dart';
+import 'package:speed_bate_frontend/graphql/client.dart';
 import 'package:speed_bate_frontend/user/user_model.dart';
 import 'package:speed_bate_frontend/websockets/matchmaking_websocket.dart';
 
@@ -25,4 +27,32 @@ class CancelMatchmakingAction extends HomeActions {
 
   final VoidCallback setIsMatching;
   final MatchmakingWebsocket matchmakingWebsocket;
+}
+
+sealed class VerifyPhoneNumberActions {}
+
+@immutable
+class VerifyPhoneNumberAction extends VerifyPhoneNumberActions {
+  VerifyPhoneNumberAction({
+    required this.code,
+    required this.client,
+    required this.setIsVerified,
+    required this.toHomeScreen,
+    required this.setError,
+  });
+
+  final String code;
+  final GraphQlClientProvider client;
+  final VoidCallback setIsVerified;
+  final VoidCallback toHomeScreen;
+  final void Function(String) setError;
+}
+
+@immutable
+class GenerateNewCodeAction extends VerifyPhoneNumberActions {
+  GenerateNewCodeAction({
+    required this.client,
+  });
+
+  final GraphQlClientProvider client;
 }

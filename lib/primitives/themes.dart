@@ -48,51 +48,55 @@ final ThemeData lightTheme = ThemeData(
 );
 
 final ThemeData darkTheme = ThemeData(
-  brightness: Brightness.dark,
-  primaryColor: Colors.grey[850],
-  elevatedButtonTheme: ElevatedButtonThemeData(
-    style: ElevatedButton.styleFrom(
-      backgroundColor: Colors.orange,
-      foregroundColor: Colors.white,
+    brightness: Brightness.dark,
+    primaryColor: Colors.grey[850],
+    elevatedButtonTheme: ElevatedButtonThemeData(
+      style: ElevatedButton.styleFrom(
+        backgroundColor: Colors.orange,
+        foregroundColor: Colors.white,
+      ),
     ),
-  ),
-  buttonTheme: const ButtonThemeData(
-    colorScheme: ColorScheme.dark(
-      primary: Colors.orange,
+    buttonTheme: const ButtonThemeData(
+      colorScheme: ColorScheme.dark(
+        primary: Colors.orange,
+      ),
     ),
-  ),
-  textSelectionTheme: const TextSelectionThemeData(
-    selectionColor: Color.fromARGB(135, 0, 123, 255),
-    selectionHandleColor: Colors.white,
-  ),
-  cupertinoOverrideTheme: const CupertinoThemeData(
-    primaryColor: cursorColor,
-  ),
-  textButtonTheme: TextButtonThemeData(
-    style: TextButton.styleFrom(
-      foregroundColor: Colors.blue, // Blue text color
-      backgroundColor: Colors.transparent, // No background
+    textSelectionTheme: const TextSelectionThemeData(
+      selectionColor: Color.fromARGB(135, 0, 123, 255),
+      selectionHandleColor: Colors.white,
+      cursorColor: cursorColor,
     ),
-  ),
-  iconButtonTheme: IconButtonThemeData(
-    style: IconButton.styleFrom(
-      foregroundColor: Colors.orange,
+    cupertinoOverrideTheme: const CupertinoThemeData(
+      primaryColor: cursorColor,
     ),
-  ),
-  inputDecorationTheme: InputDecorationTheme(
-    labelStyle: const TextStyle(color: Colors.white),
-    hintStyle: TextStyle(color: Colors.grey[400]),
-    filled: true, // Enables the background color
-    fillColor: Colors.grey[850], // Background color for TextField
-    border: const OutlineInputBorder(
-      borderRadius: BorderRadius.all(Radius.circular(borderRadiusVeryRound)),
-      borderSide: BorderSide.none, // Default border color
+    textButtonTheme: TextButtonThemeData(
+      style: TextButton.styleFrom(
+        foregroundColor: Colors.blue, // Blue text color
+        backgroundColor: Colors.transparent, // No background
+      ),
     ),
-    focusedBorder: const OutlineInputBorder(
-      borderRadius: BorderRadius.all(Radius.circular(borderRadiusVeryRound)),
-      borderSide: BorderSide.none, // No border on focus
+    iconButtonTheme: IconButtonThemeData(
+      style: IconButton.styleFrom(
+        foregroundColor: Colors.orange,
+      ),
     ),
-    contentPadding: const EdgeInsets.only(
-        right: 48, left: 16, bottom: 16, top: 16), // Adds padding
-  ),
-);
+    inputDecorationTheme: InputDecorationTheme(
+      labelStyle: const TextStyle(color: Colors.white),
+      hintStyle: TextStyle(color: Colors.grey[400]),
+      filled: true, // Enables the background color
+      fillColor: Colors.grey[850], // Background color for TextField
+      border: const OutlineInputBorder(
+        borderRadius: BorderRadius.all(Radius.circular(borderRadiusVeryRound)),
+        borderSide: BorderSide.none, // Default border color
+      ),
+      focusedBorder: const OutlineInputBorder(
+        borderRadius: BorderRadius.all(Radius.circular(borderRadiusVeryRound)),
+        borderSide: BorderSide.none, // No border on focus
+      ),
+      contentPadding: const EdgeInsets.only(
+          right: 48, left: 16, bottom: 16, top: 16), // Adds padding
+    ),
+    appBarTheme: const AppBarTheme(
+      backgroundColor: Colors.black,
+      surfaceTintColor: Colors.black,
+    ));

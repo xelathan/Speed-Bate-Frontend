@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
+import 'package:intl_phone_field/intl_phone_field.dart';
 import 'package:provider/provider.dart';
-import 'package:speed_bate_frontend/home/home.dart';
+import 'package:speed_bate_frontend/home/ui/home.dart';
+import 'package:speed_bate_frontend/home/ui/verify_phone_number.dart';
 import 'package:speed_bate_frontend/login/login_screen_view_model.dart';
 import 'package:speed_bate_frontend/primitives/themes.dart';
 import 'package:speed_bate_frontend/signup/ui/signup.dart';
@@ -34,6 +36,26 @@ class Login extends StatelessWidget {
             PageRouteBuilder(
               pageBuilder: (context, animation, secondaryAnimation) =>
                   const Home(),
+              transitionsBuilder:
+                  (context, animation, secondaryAnimation, child) {
+                // You can define the type of animation you want here.
+                const begin = Offset(1.0, 0.0); // Slide from the right
+                const end = Offset.zero;
+                const curve = Curves.easeInOut;
+
+                var tween = Tween(begin: begin, end: end)
+                    .chain(CurveTween(curve: curve));
+                var offsetAnimation = animation.drive(tween);
+
+                return SlideTransition(position: offsetAnimation, child: child);
+              },
+            ),
+          ),
+          toVerifyPhoneNumberScreen: () =>
+              Navigator.of(context).pushReplacement(
+            PageRouteBuilder(
+              pageBuilder: (context, animation, secondaryAnimation) =>
+                  const VerifyPhoneNumber(),
               transitionsBuilder:
                   (context, animation, secondaryAnimation, child) {
                 // You can define the type of animation you want here.
@@ -96,27 +118,28 @@ class _LoginScreenState extends State<LoginScreen> {
               key: _formKey,
               child: Column(
                 children: [
-                  TextFormField(
-                    keyboardType: TextInputType.phone,
-                    cursorColor: cursorColor,
-                    cursorErrorColor: cursorColor,
-                    controller: phoneNumberController,
-                    autofillHints: const [
-                      AutofillHints.telephoneNumberLocalPrefix
-                    ],
+                  IntlPhoneField(
+                    initialCountryCode: "US",
+                    dropdownDecoration: BoxDecoration(
+                      borderRadius:
+                          BorderRadius.circular(borderRadiusVeryRound),
+                    ),
                     decoration: InputDecoration(
-                      prefixIcon: const Icon(Icons.phone_iphone),
+                      labelText: 'Phone Number',
                       errorText: errorPhoneNumber,
                       errorStyle: const TextStyle(color: Colors.red),
-                      labelText: 'Phone Number',
                       contentPadding: const EdgeInsets.all(paddingMedium),
                     ),
+                    controller: phoneNumberController,
+                    onChanged: (_) {
+                      setErrorPhoneNumber(null);
+                    },
+                    flagsButtonPadding:
+                        const EdgeInsets.only(left: paddingSmall),
+                    autovalidateMode: AutovalidateMode.disabled,
                     validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Please enter your phone number';
-                      }
-                      if (!phoneRegExp.hasMatch(value)) {
-                        return 'Please enter a valid phone number';
+                      if (value == null || value.number.isEmpty) {
+                        return 'Please enter a phone number';
                       }
                       return null;
                     },
@@ -125,8 +148,6 @@ class _LoginScreenState extends State<LoginScreen> {
                   TextFormField(
                     keyboardType: TextInputType.text,
                     obscureText: true,
-                    cursorColor: cursorColor,
-                    cursorErrorColor: cursorColor,
                     controller: passwordController,
                     autofillHints: const [
                       AutofillHints.newPassword,

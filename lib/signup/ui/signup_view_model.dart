@@ -17,7 +17,7 @@ class SignupViewModel extends _$SignupViewModel {
     required void Function(dynamic) dispatcher,
     required User user,
     required GraphQlClientProvider client,
-    required VoidCallback toHomeScreen,
+    required VoidCallback toVerifyPhoneNumberScreen,
   }) =>
       SignupViewModel(
         onSignUp: (username, phoneNumber, password, setUsernameError,
@@ -32,7 +32,7 @@ class SignupViewModel extends _$SignupViewModel {
             setUsernameError: setUsernameError,
             client: client,
             user: user,
-            toHomeScreen: toHomeScreen,
+            toVerifyPhoneNumberScreen: toVerifyPhoneNumberScreen,
           ),
         ),
       );

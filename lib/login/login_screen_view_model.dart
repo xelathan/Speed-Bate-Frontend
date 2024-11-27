@@ -19,6 +19,7 @@ class LoginScreenViewModel extends _$LoginScreenViewModel {
   factory LoginScreenViewModel.fromState({
     required VoidCallback onSignUp,
     required VoidCallback toHomeScreen,
+    required VoidCallback toVerifyPhoneNumberScreen,
     required GraphQlClientProvider client,
     required void Function(dynamic) dispatcher,
     required User user,
@@ -36,6 +37,7 @@ class LoginScreenViewModel extends _$LoginScreenViewModel {
               setErrorPassword: setErrorPassword,
               user: user,
               toHomeScreen: toHomeScreen,
+              toVerifyPhoneNumberScreen: toVerifyPhoneNumberScreen,
             ),
           );
         },

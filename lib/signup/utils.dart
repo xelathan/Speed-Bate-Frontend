@@ -53,12 +53,10 @@ Future<String> signUpUser({
   } on OperationException catch (e) {
     final message = e.graphqlErrors.first.message;
 
-    print(message);
-
     switch (message) {
-      case "a user with the same username already exists":
+      case "username taken":
         throw UsernameException(message);
-      case "a user with the same phone number already exists":
+      case "phone number taken":
         throw PhoneNumberException(message);
       default:
         rethrow;

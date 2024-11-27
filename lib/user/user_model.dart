@@ -7,35 +7,45 @@ enum UserMatchingStatus {
 }
 
 class User extends ChangeNotifier {
-  late String token;
-  late String id;
-  late String phoneNumber;
-  late String username;
-  late bool verified;
+  late String _token;
+  get token => _token;
+
+  late String _id;
+  get id => _id;
+
+  late String _phoneNumber;
+  get phoneNumber => _phoneNumber;
+
+  late String _username;
+  get username => _username;
+
+  late bool _verified;
+  bool get verified => _verified;
+
   UserMatchingStatus matchingStatus = UserMatchingStatus.free;
 
   User();
 
-  void fromLogin(Map<String, dynamic> user, String tk) {
-    token = tk;
-    id = user['id'];
-    phoneNumber = user['phoneNumber'];
-    username = user['username'];
-    verified = user['verified'];
+  void fromLogin(Map<String, dynamic> user, String token) {
+    _token = token;
+    _id = user['id'];
+    _phoneNumber = user['phoneNumber'];
+    _username = user['username'];
+    _verified = user['verified'];
     notifyListeners();
   }
 
   void fromSignup({
-    required String tk,
+    required String token,
     required String userId,
-    required String name,
-    required String pn,
+    required String username,
+    required String phoneNumber,
   }) {
-    token = tk;
-    id = userId;
-    username = name;
-    phoneNumber = pn;
-    verified = false;
+    _token = token;
+    _id = userId;
+    _username = username;
+    _phoneNumber = phoneNumber;
+    _verified = false;
     notifyListeners();
   }
 
@@ -44,8 +54,13 @@ class User extends ChangeNotifier {
     notifyListeners();
   }
 
-  void setToken(String token) {
-    this.token = token;
+  set setToken(String token) {
+    _token = token;
+    notifyListeners();
+  }
+
+  set verified(bool verified) {
+    _verified = verified;
     notifyListeners();
   }
 }

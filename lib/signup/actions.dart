@@ -15,7 +15,7 @@ class SignupActionSignUp implements SignupAction {
     required this.setUsernameError,
     required this.client,
     required this.user,
-    required this.toHomeScreen,
+    required this.toVerifyPhoneNumberScreen,
   });
 
   final String phoneNumber;
@@ -29,5 +29,5 @@ class SignupActionSignUp implements SignupAction {
   final GraphQlClientProvider client;
   final User user;
 
-  final VoidCallback toHomeScreen;
+  final VoidCallback toVerifyPhoneNumberScreen;
 }

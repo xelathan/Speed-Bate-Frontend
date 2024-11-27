@@ -53,6 +53,8 @@ dependencies:
   graphql_flutter: ^5.1.2
   path_provider: ^2.1.5
   encrypt: ^5.0.3
+  intl_phone_field: ^3.2.0
+  flutter_otp_text_field: ^1.1.0+2
 
 dev_dependencies:
   flutter_test:

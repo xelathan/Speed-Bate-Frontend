@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
+import 'package:intl_phone_field/intl_phone_field.dart';
 import 'package:provider/provider.dart';
-import 'package:speed_bate_frontend/home/home.dart';
+import 'package:speed_bate_frontend/home/ui/verify_phone_number.dart';
 import 'package:speed_bate_frontend/primitives/themes.dart';
 import 'package:speed_bate_frontend/signup/ui/signup_view_model.dart';
 import 'package:speed_bate_frontend/state.dart';
@@ -15,26 +16,11 @@ class Signup extends StatelessWidget {
           dispatcher: StoreProvider.of<AppState>(context).dispatch,
           client: context.read(),
           user: context.read(),
-          toHomeScreen: () {
+          toVerifyPhoneNumberScreen: () {
             Navigator.of(context).pop();
             Navigator.of(context).pushReplacement(
-              PageRouteBuilder(
-                pageBuilder: (context, animation, secondaryAnimation) =>
-                    const Home(),
-                transitionsBuilder:
-                    (context, animation, secondaryAnimation, child) {
-                  // You can define the type of animation you want here.
-                  const begin = Offset(1.0, 0.0); // Slide from the right
-                  const end = Offset.zero;
-                  const curve = Curves.easeInOut;
-
-                  var tween = Tween(begin: begin, end: end)
-                      .chain(CurveTween(curve: curve));
-                  var offsetAnimation = animation.drive(tween);
-
-                  return SlideTransition(
-                      position: offsetAnimation, child: child);
-                },
+              MaterialPageRoute(
+                builder: (context) => const VerifyPhoneNumber(),
               ),
             );
           },
@@ -99,8 +85,6 @@ class _SignupScreenState extends State<SignupScreen> {
   @override
   Widget build(BuildContext context) => Scaffold(
         appBar: AppBar(
-          backgroundColor: Colors.black,
-          surfaceTintColor: Colors.black,
           leading: IconButton(
             icon: const Icon(Icons.close),
             onPressed: () => Navigator.of(context).pop(),
@@ -116,8 +100,6 @@ class _SignupScreenState extends State<SignupScreen> {
                 children: [
                   TextFormField(
                     keyboardType: TextInputType.text,
-                    cursorColor: cursorColor,
-                    cursorErrorColor: cursorColor,
                     controller: usernameController,
                     autofillHints: const [
                       AutofillHints.username,
@@ -140,27 +122,28 @@ class _SignupScreenState extends State<SignupScreen> {
                     },
                   ),
                   const SizedBox(height: paddingMedium),
-                  TextFormField(
-                    keyboardType: TextInputType.phone,
-                    cursorColor: cursorColor,
-                    cursorErrorColor: cursorColor,
-                    controller: phoneNumberController,
-                    autofillHints: const [
-                      AutofillHints.telephoneNumberLocalPrefix
-                    ],
+                  IntlPhoneField(
+                    initialCountryCode: "US",
+                    dropdownDecoration: BoxDecoration(
+                      borderRadius:
+                          BorderRadius.circular(borderRadiusVeryRound),
+                    ),
                     decoration: InputDecoration(
-                      prefixIcon: const Icon(Icons.phone_iphone),
+                      labelText: 'Phone Number',
                       errorText: phoneNumberError,
                       errorStyle: const TextStyle(color: Colors.red),
-                      labelText: 'Phone Number',
                       contentPadding: const EdgeInsets.all(paddingMedium),
                     ),
+                    controller: phoneNumberController,
+                    onChanged: (_) {
+                      setPhoneNumberError(null);
+                    },
+                    flagsButtonPadding:
+                        const EdgeInsets.only(left: paddingSmall),
+                    autovalidateMode: AutovalidateMode.disabled,
                     validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Please enter your phone number';
-                      }
-                      if (!phoneRegExp.hasMatch(value)) {
-                        return 'Please enter a valid phone number';
+                      if (value == null || value.number.isEmpty) {
+                        return 'Please enter a phone number';
                       }
                       return null;
                     },
@@ -173,8 +156,6 @@ class _SignupScreenState extends State<SignupScreen> {
                   TextFormField(
                     keyboardType: TextInputType.text,
                     obscureText: true,
-                    cursorColor: cursorColor,
-                    cursorErrorColor: cursorColor,
                     controller: passwordController,
                     autofillHints: const [
                       AutofillHints.newPassword,
@@ -200,8 +181,6 @@ class _SignupScreenState extends State<SignupScreen> {
                   TextFormField(
                     keyboardType: TextInputType.text,
                     obscureText: true,
-                    cursorColor: cursorColor,
-                    cursorErrorColor: cursorColor,
                     controller: confirmPasswordController,
                     autofillHints: const [
                       AutofillHints.password,

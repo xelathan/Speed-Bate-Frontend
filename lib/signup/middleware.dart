@@ -20,17 +20,17 @@ void signupMiddleware(
       action.client.upgradeProtected(token);
       final userId = await getUserId(client: action.client.client);
       action.user.fromSignup(
-        tk: token,
+        token: token,
         userId: userId,
-        name: action.username,
-        pn: action.phoneNumber,
+        username: action.username,
+        phoneNumber: action.phoneNumber,
       );
 
       action.setUsernameError(null);
       action.setPhoneNumberError(null);
       action.setPasswordError(null);
 
-      action.toHomeScreen();
+      action.toVerifyPhoneNumberScreen();
     } on UsernameException catch (e) {
       action.setUsernameError(e.message);
       action.setPhoneNumberError(null);

@@ -14,7 +14,7 @@ const String HTTP_METHOD_PATCH = 'PATCH';
 const HTTP_BASE_URL = 'http://';
 const WEBSOCKET_BASE_URL = 'ws://';
 
-const HOST = 'localhost';
+const HOST = '192.168.68.76'; // Use localhost for simulator
 const STREAM_API_PORT = "8080";
 const ACCOUNTS_API_PORT = "1000";
 const API_VERSION = 'v1';

@@ -30,7 +30,7 @@ class Chat extends StatelessWidget {
           chatMatchStatus: ChatMatchStatus.starting,
           channel: RealTimeMessagingWebsocket.initializeChannel(
             matchId: matchId,
-            userId: context.read<User>().token,
+            token: context.read<User>().token,
           ),
           matchId: matchId,
           opponentId: opponentId,

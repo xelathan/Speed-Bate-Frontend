@@ -21,7 +21,7 @@ class RealTimeMessagingWebsocket extends ChangeNotifier {
         _opponentId = opponentId,
         _matchId = matchId;
 
-  WebSocketChannel _channel;
+  final WebSocketChannel _channel;
 
   WebSocketChannel get channel => _channel;
 
@@ -35,11 +35,11 @@ class RealTimeMessagingWebsocket extends ChangeNotifier {
 
   ChatMatchStatus get chatMatchStatus => _chatMatchStatus;
 
-  String _opponentId;
+  final String _opponentId;
 
   String get opponentId => _opponentId;
 
-  String _matchId;
+  final String _matchId;
 
   String get matchId => _matchId;
 
@@ -54,14 +54,14 @@ class RealTimeMessagingWebsocket extends ChangeNotifier {
 
   static WebSocketChannel initializeChannel({
     required String matchId,
-    required String userId,
+    required String token,
   }) {
     return IOWebSocketChannel.connect(
       Uri.parse(
           '$WEBSOCKET_BASE_URL$HOST:$STREAM_API_PORT/stream_api/$API_VERSION/realtime_messaging/chat'),
       headers: {
         'x-api-key': dotenv.env['API_KEY'],
-        'user-id': userId,
+        'Authorization': 'Bearer $token',
         'match-id': matchId,
       },
     );

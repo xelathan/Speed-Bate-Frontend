@@ -26,8 +26,11 @@ class Home extends StatelessWidget {
               toChatScreen: (opponentId, matchId, topic) =>
                   Navigator.of(context).pushReplacement(
                     MaterialPageRoute(
-                      // Chat screen
-                      builder: (context) => Placeholder(),
+                      builder: (context) => Chat(
+                        topic: topic,
+                        opponentId: opponentId,
+                        matchId: matchId,
+                      ),
                     ),
                   )),
           builder: (context, viewModel, _) => HomeScreen(
